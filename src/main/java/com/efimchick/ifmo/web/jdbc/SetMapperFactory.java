@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.efimchick.ifmo.web.jdbc.domain.Employee;
@@ -15,17 +15,16 @@ public class SetMapperFactory {
 
     public SetMapper<Set<Employee>> employeesSetMapper() {
         return resultSet -> {
+            Set<Employee> employeeSet = new HashSet<>();
             try {
-                Set<Employee> employeeSet = new LinkedHashSet<>();
-
                 while (resultSet.next()) {
                     employeeSet.add(getEmployee(resultSet));
                 }
-                return employeeSet;
             } catch (SQLException e) {
                 e.printStackTrace();
                 return null;
             }
+            return employeeSet;
         };
     }
 
