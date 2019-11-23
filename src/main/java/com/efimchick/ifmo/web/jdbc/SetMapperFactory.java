@@ -43,8 +43,9 @@ public class SetMapperFactory {
             resultSet.beforeFirst();
 
             while (resultSet.next()) {
-                if (managerId.equals(Integer.valueOf(resultSet.getString("ID")))) {
+                if (resultSet.getInt("ID") == managerId) {
                     manager = getEmployee(resultSet);
+                    break;
                 }
             }
             resultSet.absolute(rowNumber);
