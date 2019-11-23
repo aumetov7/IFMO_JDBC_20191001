@@ -39,7 +39,7 @@ public class SetMapperFactory {
                     Position.valueOf(resultSet.getString("POSITION")),
                     LocalDate.parse(resultSet.getString("HIREDATE")),
                     resultSet.getBigDecimal("SALARY"),
-                    getEmployee(resultSet)
+                    getManager(resultSet, resultSet.getInt("MANAGER"))
             );
         } catch (SQLException e) {
             e.printStackTrace();
