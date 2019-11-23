@@ -54,7 +54,7 @@ public class SetMapperFactory {
         Integer managerId = Integer.valueOf(resultSet.getString("MANAGER"));
         Integer rowNumber = Integer.valueOf(String.valueOf(resultSet.getRow()));
 
-        if (managerId == null) {
+        if (managerId == null && rowNumber == null) {
             return null;
         }
 
