@@ -29,7 +29,7 @@ public class SetMapperFactory {
         };
     }
 
-    private Employee getManager(ResultSet resultSet) throws SQLException {
+    private Employee getEmployee(ResultSet resultSet) throws SQLException {
         try {
             return new Employee(
                     new BigInteger(resultSet.getString("ID")),
@@ -40,7 +40,7 @@ public class SetMapperFactory {
                     Position.valueOf(resultSet.getString("POSITION")),
                     LocalDate.parse(resultSet.getString("HIREDATE")),
                     resultSet.getBigDecimal("SALARY"),
-                    getManager(resultSet)
+                    getEmployee(resultSet)
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,10 +48,11 @@ public class SetMapperFactory {
         }
     }
 
-    private Employee getEmployee(ResultSet resultSet) throws SQLException {
+    public Employee getManager(ResultSet resultSet, int managerId) throws SQLException {
         Employee manager = null;
-        int managerId = Integer.valueOf(resultSet.getString("MANAGER"));
+        //int managerId = Integer.valueOf(resultSet.getString("MANAGER"));
         int rowNumber = resultSet.getRow();
+        resultSet.beforeFirst();
 
         while (resultSet.next()) {
             if (resultSet.getInt("ID") == managerId) {
