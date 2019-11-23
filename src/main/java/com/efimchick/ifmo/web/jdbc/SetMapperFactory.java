@@ -29,27 +29,8 @@ public class SetMapperFactory {
         };
     }
 
-    private Employee getEmployee(ResultSet resultSet) throws SQLException {
+    private Employee getManager(ResultSet resultSet) throws SQLException {
         try {
-            Employee manager = null;
-
-            Integer managerId = Integer.valueOf(resultSet.getString("MANAGER"));
-            Integer rowNumber = Integer.valueOf(String.valueOf(resultSet.getRow()));
-
-            if (managerId == null) {
-                return null;
-            }
-
-            resultSet.beforeFirst();
-
-            while (resultSet.next()) {
-                if (resultSet.getInt("ID") == managerId) {
-                    manager = getEmployee(resultSet);
-                    break;
-                }
-            }
-            resultSet.absolute(rowNumber);
-
             return new Employee(
                     new BigInteger(resultSet.getString("ID")),
                     new FullName(
@@ -59,11 +40,34 @@ public class SetMapperFactory {
                     Position.valueOf(resultSet.getString("POSITION")),
                     LocalDate.parse(resultSet.getString("HIREDATE")),
                     resultSet.getBigDecimal("SALARY"),
-                    manager
+                    getManager(resultSet)
             );
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private Employee getEmployee(ResultSet resultSet) throws SQLException {
+        Employee manager = null;
+
+        Integer managerId = Integer.valueOf(resultSet.getString("MANAGER"));
+        Integer rowNumber = Integer.valueOf(String.valueOf(resultSet.getRow()));
+
+        if (managerId == null) {
+            return null;
+        }
+
+        resultSet.beforeFirst();
+
+        while (resultSet.next()) {
+            if (resultSet.getInt("ID") == managerId) {
+                manager = getEmployee(resultSet);
+                break;
+            }
+        }
+        resultSet.absolute(rowNumber);
+
+        return manager;
     }
 }
