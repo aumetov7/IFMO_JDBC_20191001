@@ -51,23 +51,19 @@ public class SetMapperFactory {
     private Employee getEmployee(ResultSet resultSet) throws SQLException {
         Employee manager = null;
 
-        Integer managerId = Integer.valueOf(resultSet.getString("MANAGER"));
-        Integer rowNumber = Integer.valueOf(String.valueOf(resultSet.getRow()));
+        if (resultSet.getString("MANAGER") != null) {
+            int managerId = Integer.valueOf(resultSet.getString("MANAGER"));
+            int rowNumber = resultSet.getRow();
 
-        if (managerId == null && rowNumber == null) {
-            return null;
-        }
+            resultSet.beforeFirst();
 
-        resultSet.beforeFirst();
-
-        while (resultSet.next()) {
-            if (resultSet.getInt("ID") == managerId) {
-                manager = getEmployee(resultSet);
-                break;
+            while (resultSet.next()) {
+                if (resultSet.getInt("ID") == managerId) {
+                    manager = getEmployee(resultSet);
+                }
             }
+            resultSet.absolute(rowNumber);
         }
-        resultSet.absolute(rowNumber);
-
         return manager;
     }
 }
